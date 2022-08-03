@@ -1,4 +1,6 @@
-This is a rewrite of a userspace USB driver for TEMPer devices presenting
+This is a fork of the main temper-python driver.
+
+It is a rewrite of a userspace USB driver for TEMPer devices presenting
 a USB ID like this: `0c45:7401 Microdia`
 My device came from [M-Ware ID7747](http://www.m-ware.de/m-ware-usb-thermometer-40--120-c-emailbenachrichtigung-id7747/a-7747/)
 and also reports itself as 'RDing TEMPerV1.2'.
@@ -58,6 +60,14 @@ with -p option
     Device #0 (bus 1 - port 1.3): 22.4°C 72.3°F
 
 Which tells you there is a USB hub plugged (internally or externally) on the port 1 of the bus 1 of the host, and your TEMPer device  is on the port 3 of that hub.
+
+with -a option
+
+    $ temper-poll -a
+    Found 1 devices
+    Device #1 (bus 1 - address 31): 36.9°C 98.4°F
+
+Which tells you there is a USB hub plugged (internally or externally) on bus 1 of the host, and your TEMPer device is at address 31 on that hub.
 
 ## Tell kernel to leave TEMPer alone 
 

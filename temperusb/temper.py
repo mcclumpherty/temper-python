@@ -87,8 +87,9 @@ class TemperDevice(object):
 
         self._device = device
         self._bus = device.bus
+        self._address = device.address
         self._ports = getattr(device, 'port_number', None)
-        if self._ports == None:
+        if None == self._ports:
             self._ports = find_ports(device)
         self.set_calibration_data()
         try:
@@ -192,6 +193,14 @@ class TemperDevice(object):
             raise ValueError('Only sensor_count of 1-3 supported')
 
         self._sensor_count = int(count)
+
+    def get_address(self):
+        """
+        Get device USB ports.
+        """
+        if self._address:
+            return self._address
+        return ''
 
     def get_ports(self):
         """
@@ -341,6 +350,7 @@ class TemperDevice(object):
             celsius = celsius * self._scale + self._offset
             LOGGER.debug("T=%.5fC" % celsius)
             results[sensor] = {
+                'address': self.get_address(),
                 'ports': self.get_ports(),
                 'bus': self.get_bus(),
                 'sensor': sensor,

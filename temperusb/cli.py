@@ -3,13 +3,15 @@ from __future__ import print_function, absolute_import
 import argparse
 import logging
 
-from .temper import TemperHandler
+from temperusb.temper import TemperHandler
 
 
 def parse_args():
     descr = "Temperature data from a TEMPer v1.2/v1.3 sensor."
 
     parser = argparse.ArgumentParser(description=descr)
+    parser.add_argument("-a", "--disp_address", action='store_true',
+                        help="Display address")
     parser.add_argument("-p", "--disp_ports", action='store_true',
                         help="Display ports")
     units = parser.add_mutually_exclusive_group(required=False)
@@ -82,12 +84,17 @@ def main():
                 output += '%0.1f; ' % reading[sensor][dict_key]
             output = output[0:len(output) - 2]
         else:
+            location_info = ''
+            addressinfo = ''
             portinfo = ''
             tempinfo = ''
             huminfo = ''
             for sensor in sorted(reading):
+                location_info = ' (bus %(bus)s -' % reading[sensor]
+                if args.disp_address and addressinfo == '':
+                    location_info = "%s address %s" % (location_info, reading[sensor]['address'])
                 if args.disp_ports and portinfo == '':
-                    portinfo = " (bus %(bus)s - port %(ports)s)" % reading[sensor]
+                    location_info = "%s port %s" % (location_info, reading[sensor]['ports'])
                 try:
                     tempinfo += '%0.1f°C %0.1f°F; ' % (
                         reading[sensor]['temperature_c'],
@@ -101,8 +108,9 @@ def main():
                     pass
             tempinfo = tempinfo[0:len(output) - 2]
             huminfo = huminfo[0:len(output) - 2]
+            location_info = "%s)" % location_info
 
-            output = 'Device #%i%s: %s %s' % (i, portinfo, tempinfo, huminfo)
+            output = 'Device #%i%s: %s %s' % (i, location_info, tempinfo, huminfo)
         print(output)
 
 
