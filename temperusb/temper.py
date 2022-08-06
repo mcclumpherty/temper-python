@@ -88,7 +88,7 @@ class TemperDevice(object):
         self._device = device
         self._bus = device.bus
         self._address = device.address
-        self._ports = getattr(device, 'port_number', None)
+        self._ports = device.port_numbers
         if None == self._ports:
             self._ports = find_ports(device)
         self.set_calibration_data()

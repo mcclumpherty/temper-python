@@ -94,7 +94,8 @@ def main():
                 if args.disp_address and addressinfo == '':
                     location_info = "%s address %s" % (location_info, reading[sensor]['address'])
                 if args.disp_ports and portinfo == '':
-                    location_info = "%s port %s" % (location_info, reading[sensor]['ports'])
+                    ports_info = '.'.join([str(i) for i in reading[sensor]['ports']])
+                    location_info = "%s port %s" % (location_info, ports_info)
                 try:
                     tempinfo += '%0.1f°C %0.1f°F; ' % (
                         reading[sensor]['temperature_c'],
